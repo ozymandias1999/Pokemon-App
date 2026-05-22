@@ -1,9 +1,48 @@
+h1 {
+    display: flex;
+    justify-content: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #f09928;
+    text-shadow: 3px 3px 0px #2b2b2b;
+}
+
+body {
+    background-color:  #5a67d8;
+}
+
+.nav {
+    display: flexbox;
+    justify-self: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+
+#pokeInput {
+    font-size: 1.5rem;
+    color: azure;
+    shape-outside: -moz-linear-gradient(10.5rem);
+}
+
+#pokeButton {
+    font-size: 1.5rem;
+    border-bottom: 1rem;
+}
+
+#pokeRandom {
+    font-size: 1.5rem;
+    border-bottom: 1rem;
+}
+
+
 #card {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
     margin-top: 20px;
+    
 }
 
 
@@ -14,6 +53,13 @@
     width: 180px;
     text-align: center;
     font-size: larger;
+    box-shadow: 1rem;
+    box-shadow: 0px 32px 32px rgba(0,0,0,0.2);
+}
+
+.poke-Card:hover {
+    transform: scale(1.10);
+    transition: 0.4s;
 }
 
 .poke-Card img{

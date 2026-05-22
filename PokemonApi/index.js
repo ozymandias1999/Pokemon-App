@@ -3,7 +3,7 @@ const button = document.getElementById("pokeButton")
 const card = document.getElementById("card")
 const btnRandom = document.getElementById("pokeRandom") 
 
-let login = false
+let loading = false
 let pokemons = []
 
 const typeColors = {
@@ -33,7 +33,8 @@ async function searchPokemon() {
     try{
     const pokeName = input.value
 
-    // if(login) {}
+    loading = true
+    pokeRender()
 
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
 
@@ -42,7 +43,9 @@ async function searchPokemon() {
     console.log(data)
 
     pokemons.push(data)
-
+    
+    
+    loading = false
     pokeRender()
 
     }
@@ -57,9 +60,20 @@ async function searchPokemon() {
 }
 
 
+function load () {
+    const waiting = document.createElement("h2")
+    waiting.textContent = "Cargando..."
+    card.appendChild(waiting)
+}
+
+
+
 function pokeRender () {
     //Limpia para futuros render sin elimnar lo que ya se tiene
     card.innerHTML=""
+    //Vista de carga
+    if (loading) {load()}
+
     //Función que renderiza los pokemones
     pokemons.forEach(pokemon => {  
     //Se crean los elementos del card del pokemon
@@ -91,6 +105,9 @@ function pokeRender () {
 
 async function randomer () {
     try{
+    
+    loading = true
+    if (loading) {load()}
 
     const id = Math.floor(Math.random() * 1025) + 1
     console.log(id)
@@ -104,7 +121,8 @@ async function randomer () {
     console.log(data)
 
     pokemons.push(data)
-
+    
+    loading = false
     pokeRender()
 
     }
