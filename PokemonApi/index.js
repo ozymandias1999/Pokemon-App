@@ -1,10 +1,32 @@
 const input = document.getElementById("pokeInput")
 const button = document.getElementById("pokeButton")
-const card = document.getElementById("pokeCard")
+const card = document.getElementById("card")
 const btnRandom = document.getElementById("pokeRandom") 
 
 let login = false
-let pokemon = null
+let pokemons = []
+
+const typeColors = {
+    normal: "#D8D8C0",
+    fire: "#FFB4A2",
+    water: "#A0C4FF",
+    electric: "#FFE699",
+    grass: "#B7E4C7",
+    ice: "#CDEDF6",
+    fighting: "#E8A598",
+    poison: "#D8B4E2",
+    ground: "#E6CCB2",
+    flying: "#CDB4DB",
+    psychic: "#FFAFCC",
+    bug: "#CDE77F",
+    rock: "#D3C0A8",
+    ghost: "#B8B8FF",
+    dragon: "#A0C4FF",
+    dark: "#A68A64",
+    steel: "#CED4DA",
+    fairy: "#FFC8DD"
+}
+
 
 async function searchPokemon() {
 
@@ -19,7 +41,7 @@ async function searchPokemon() {
 
     console.log(data)
 
-    pokemon = data
+    pokemons.push(data)
 
     pokeRender()
 
@@ -36,17 +58,35 @@ async function searchPokemon() {
 
 
 function pokeRender () {
+    //Limpia para futuros render sin elimnar lo que ya se tiene
     card.innerHTML=""
+    //Función que renderiza los pokemones
+    pokemons.forEach(pokemon => {  
+    //Se crean los elementos del card del pokemon
+    const pokeCard = document.createElement("div")
     const pokeImage = document.createElement("img")
     const pokeName = document.createElement("h3")
     const pokeType = document.createElement("p")
+    //Esto sirve para poder ubicar el nombre del tipo para luego añadirle el color correcto segun tipo
+    const pokeTypeName = pokemon.types[0].type.name
+    //Una vez obtenemos el nombre lo buscamos dentro de typeColors
+    const color = typeColors[pokeTypeName]
+    //Se indica con que información rellenar esos elementos creados
     pokeImage.src= pokemon.sprites.front_default
     pokeName.textContent = pokemon.name
     pokeType.textContent = pokemon.types[0].type.name
-    card.appendChild(pokeImage)
-    card.appendChild(pokeName)
-    card.appendChild(pokeType)
-}
+    //Se adhieren al pokeCard
+    pokeCard.appendChild(pokeImage)
+    pokeCard.appendChild(pokeName)
+    pokeCard.appendChild(pokeType)
+    //Se añaden los estilos
+    pokeCard.classList.add("poke-Card")
+    //Luego de obtener el valor del Type coloar (fijarse arriba) se añade el colocar a los estilos segun el tipo
+    pokeCard.style.backgroundColor = color
+    //Se adhiere el pokeCard al card
+    card.appendChild(pokeCard)
+})}
+    
 
 
 async function randomer () {
@@ -63,7 +103,7 @@ async function randomer () {
 
     console.log(data)
 
-    pokemon = data
+    pokemons.push(data)
 
     pokeRender()
 

@@ -1,3 +1,25 @@
-.pokeCard {
-    border-color: aquamarine;
+#card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+
+.poke-Card {
+    border: 5px solid black;
+    border-radius: 12px;
+    padding: 1px;
+    width: 180px;
+    text-align: center;
+    font-size: larger;
+}
+
+.poke-Card img{
+    width: 180px;
+}
+
+.poke-Card h3 {
+    text-transform: capitalize;
 }
