@@ -75,12 +75,13 @@ function pokeRender () {
     if (loading) {load()}
 
     //Función que renderiza los pokemones
-    pokemons.forEach(pokemon => {  
+    pokemons.forEach((pokemon, index) => {  
     //Se crean los elementos del card del pokemon
     const pokeCard = document.createElement("div")
     const pokeImage = document.createElement("img")
     const pokeName = document.createElement("h3")
     const pokeType = document.createElement("p")
+    const pokeDelete = document.createElement("button")
     //Esto sirve para poder ubicar el nombre del tipo para luego añadirle el color correcto segun tipo
     const pokeTypeName = pokemon.types[0].type.name
     //Una vez obtenemos el nombre lo buscamos dentro de typeColors
@@ -89,16 +90,33 @@ function pokeRender () {
     pokeImage.src= pokemon.sprites.front_default
     pokeName.textContent = pokemon.name
     pokeType.textContent = pokemon.types[0].type.name
+    pokeDelete.textContent = "X"
     //Se adhieren al pokeCard
+    pokeCard.appendChild(pokeDelete)
     pokeCard.appendChild(pokeImage)
     pokeCard.appendChild(pokeName)
     pokeCard.appendChild(pokeType)
+    
     //Se añaden los estilos
     pokeCard.classList.add("poke-Card")
+    pokeDelete.classList.add("delete-btn")
     //Luego de obtener el valor del Type coloar (fijarse arriba) se añade el colocar a los estilos segun el tipo
     pokeCard.style.backgroundColor = color
     //Se adhiere el pokeCard al card
     card.appendChild(pokeCard)
+
+
+    //Boton paara eliminar card
+
+    pokeDelete.addEventListener("click", ()=> {
+      pokemons =  pokemons.filter(poke=> pokemon.id !== poke.id )
+      //Visualizar en consola el pokemon
+      console.log(pokemons)
+      //Se vuelve a renderizar
+      pokeRender()
+
+    })
+    
 })}
     
 
@@ -146,3 +164,5 @@ input.addEventListener("keydown",(event)=> {
 
 
 btnRandom.addEventListener("click",randomer)
+
+
