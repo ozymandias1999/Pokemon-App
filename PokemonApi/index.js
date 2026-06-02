@@ -28,6 +28,7 @@ const typeColors = {
 }
 
 
+
 async function searchPokemon() {
 
     try{
@@ -41,6 +42,14 @@ async function searchPokemon() {
     const data = await response.json()
 
     console.log(data)
+    
+    if (pokemons.some(pokemon=> pokemon.id === data.id))  {
+        console.log("Duplicado detectado")
+        pokemonExiste()
+        loading = false
+        pokeRender()
+        return
+    }
 
     pokemons.push(data)
     
@@ -75,31 +84,49 @@ function pokeRender () {
     if (loading) {load()}
 
     //Función que renderiza los pokemones
-    pokemons.forEach((pokemon, index) => {  
+    pokemons.forEach(pokemon => {  
     //Se crean los elementos del card del pokemon
     const pokeCard = document.createElement("div")
     const pokeImage = document.createElement("img")
     const pokeName = document.createElement("h3")
     const pokeType = document.createElement("p")
     const pokeDelete = document.createElement("button")
+    const pokeHeight = document.createElement("p")
+    const pokeWeigth = document.createElement("p")
+    const pokeSkills = document.createElement("p")
     //Esto sirve para poder ubicar el nombre del tipo para luego añadirle el color correcto segun tipo
     const pokeTypeName = pokemon.types[0].type.name
     //Una vez obtenemos el nombre lo buscamos dentro de typeColors
     const color = typeColors[pokeTypeName]
+    //Se extrae las habilidades de los pokemones en un array
+    const skills = pokemon.abilities.map(ability=> ability.ability.name)
+    //Se pasa a texto las habilidades
+    const skillsName = skills.join(", ")
+    console.log(skillsName)
     //Se indica con que información rellenar esos elementos creados
     pokeImage.src= pokemon.sprites.front_default
     pokeName.textContent = pokemon.name
-    pokeType.textContent = pokemon.types[0].type.name
+    pokeType.textContent = `Type: ${pokemon.types[0].type.name}`
     pokeDelete.textContent = "X"
+    pokeHeight.textContent = `Height: ${(pokemon.height)/10} m`
+    pokeWeigth.textContent = `Weight: ${(pokemon.weight)/10} kg`
+    pokeSkills.textContent = `Skills: ${skillsName}`    
+   
     //Se adhieren al pokeCard
     pokeCard.appendChild(pokeDelete)
     pokeCard.appendChild(pokeImage)
     pokeCard.appendChild(pokeName)
     pokeCard.appendChild(pokeType)
+    pokeCard.appendChild(pokeHeight)
+    pokeCard.appendChild(pokeWeigth)
+    pokeCard.appendChild(pokeSkills)
+
     
     //Se añaden los estilos
     pokeCard.classList.add("poke-Card")
     pokeDelete.classList.add("delete-btn")
+    pokeSkills.classList.add("skills")
+
     //Luego de obtener el valor del Type coloar (fijarse arriba) se añade el colocar a los estilos segun el tipo
     pokeCard.style.backgroundColor = color
     //Se adhiere el pokeCard al card
@@ -120,6 +147,12 @@ function pokeRender () {
 })}
     
 
+function pokemonExiste () {
+    const existMessage = document.createElement("p")
+    existMessage.textContent = "⚠️ Este Pokémon ya existe"
+    document.body.appendChild(existMessage)
+}
+
 
 async function randomer () {
     try{
@@ -137,6 +170,14 @@ async function randomer () {
     const data = await response.json()
 
     console.log(data)
+    
+    if (pokemons.some(pokemon=> pokemon.id === data.id))  {
+        console.log("Duplicado detectado")
+        pokemonExiste()
+        loading = false
+        pokeRender()
+        return
+    }
 
     pokemons.push(data)
     
