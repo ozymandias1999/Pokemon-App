@@ -95,9 +95,18 @@ function pokeRender () {
     const pokeWeigth = document.createElement("p")
     const pokeSkills = document.createElement("p")
     //Esto sirve para poder ubicar el nombre del tipo para luego añadirle el color correcto segun tipo
-    const pokeTypeName = pokemon.types[0].type.name
+    const pokeTypeName = pokemon.types.map(type=> type.type.name)
+    
+    //Convertimos el array con los tipo de pokemon en strings
+    const pokeTypeNames = pokeTypeName.join(", ")
+
+    //Seleccionamos el primer tipo del pokemons para colocar el color del fondo del card acorde a ese tipo
+    const primaryType = pokeTypeName[0]
+
     //Una vez obtenemos el nombre lo buscamos dentro de typeColors
-    const color = typeColors[pokeTypeName]
+
+    const color = typeColors[primaryType] 
+
     //Se extrae las habilidades de los pokemones en un array
     const skills = pokemon.abilities.map(ability=> ability.ability.name)
     //Se pasa a texto las habilidades
@@ -106,7 +115,7 @@ function pokeRender () {
     //Se indica con que información rellenar esos elementos creados
     pokeImage.src= pokemon.sprites.front_default
     pokeName.textContent = pokemon.name
-    pokeType.textContent = `Type: ${pokemon.types[0].type.name}`
+    pokeType.textContent = `Type: ${pokeTypeNames}`
     pokeDelete.textContent = "X"
     pokeHeight.textContent = `Height: ${(pokemon.height)/10} m`
     pokeWeigth.textContent = `Weight: ${(pokemon.weight)/10} kg`
@@ -127,7 +136,7 @@ function pokeRender () {
     pokeDelete.classList.add("delete-btn")
     pokeSkills.classList.add("skills")
 
-    //Luego de obtener el valor del Type coloar (fijarse arriba) se añade el colocar a los estilos segun el tipo
+    //Luego de obtener el valor del Type colocar (fijarse arriba) se añade el colocar a los estilos segun el tipo
     pokeCard.style.backgroundColor = color
     //Se adhiere el pokeCard al card
     card.appendChild(pokeCard)
@@ -136,22 +145,32 @@ function pokeRender () {
     //Boton paara eliminar card
 
     pokeDelete.addEventListener("click", ()=> {
+
       pokemons =  pokemons.filter(poke=> pokemon.id !== poke.id )
       //Visualizar en consola el pokemon
       console.log(pokemons)
       //Se vuelve a renderizar
       pokeRender()
-
     })
+
+    pokeCard.addEventListener("click",()=>{
+        openModal(pokemon)
+    })
+
     
+
 })}
     
+
+//Verificacion de pokemon existente
 
 function pokemonExiste () {
     const existMessage = document.createElement("p")
     existMessage.textContent = "⚠️ Este Pokémon ya existe"
     document.body.appendChild(existMessage)
 }
+
+//Randomer
 
 
 async function randomer () {
@@ -206,4 +225,83 @@ input.addEventListener("keydown",(event)=> {
 
 btnRandom.addEventListener("click",randomer)
 
+
+//Modal
+
+const modal = document.getElementById("modal")
+const modalContent = document.getElementById("modalContent")
+
+function openModal (pokemon) {
+
+    modalContent.innerHTML = ""
+    //Se crean los elementos del card del pokemon
+    const modalPokeCard = document.createElement("div")
+    const modalPokeImage = document.createElement("img")
+    const modalPokeName = document.createElement("h3")
+    const modalPokeType = document.createElement("p")
+    const modalPokeDelete = document.createElement("button")
+    const modalPokeHeight = document.createElement("p")
+    const modalPokeWeigth = document.createElement("p")
+    const modalPokeSkills = document.createElement("p")
+    
+    //Esto sirve para poder ubicar el nombre del tipo para luego añadirle el color correcto segun tipo
+    const modalPokeTypeName = pokemon.types.map(type=> type.type.name)
+    //Convertimos el array con los tipo de pokemon en strings
+    const modalPokeTypeNames = modalPokeTypeName.join(", ")
+    //Seleccionamos el primer tipo del pokemons para colocar el color del fondo del card acorde a ese tipo
+    const modalPrimaryType = modalPokeTypeName[0]
+    const modalColor = typeColors[modalPrimaryType] 
+    //Se extrae las habilidades de los pokemones en un array
+    const modalSkills = pokemon.abilities.map(ability=> ability.ability.name)
+    //Se pasa a texto las habilidades
+    const modalSkillsName = modalSkills.join(", ")
+    console.log(modalSkillsName)
+    //Se indica con que información rellenar esos elementos creados
+
+
+    modalPokeImage.src= pokemon.sprites.front_default
+    modalPokeName.textContent = pokemon.name
+    modalPokeType.textContent = `Type: ${modalPokeTypeNames}`
+    modalPokeDelete.textContent = "X"
+    modalPokeHeight.textContent = `Height: ${(pokemon.height)/10} m`
+    modalPokeWeigth.textContent = `Weight: ${(pokemon.weight)/10} kg`
+    modalPokeSkills.textContent = `Skills: ${modalSkillsName}`    
+
+    //Se adhieren al pokeCard
+    modalContent.appendChild(modalPokeDelete)
+    modalContent.appendChild(modalPokeImage)
+    modalContent.appendChild(modalPokeName)
+    modalContent.appendChild(modalPokeType)
+    modalContent.appendChild(modalPokeHeight)
+    modalContent.appendChild(modalPokeWeigth)
+    modalContent.appendChild(modalPokeSkills)
+
+    //Se añaden los estilos
+    modalContent.classList.add("poke-Card")
+    modalPokeDelete.classList.add("delete-btn")
+    modalPokeSkills.classList.add("skills")
+
+     //Luego de obtener el valor del Type colocar (fijarse arriba) se añade el colocar a los estilos segun el tipo
+    modalContent.style.backgroundColor = modalColor
+
+     modalPokeDelete.addEventListener("click", ()=> {
+      modal.classList.add("hidden")
+    })
+
+    console.log(pokemon.stats)
+
+    const modalStats = pokemon.stats.map(stats=> `${stats.stat.name}: ${stats.base_stat}`)
+
+    console.log(modalStats)
+
+    modalStats.forEach(stat=> {
+        const statText = document.createElement("p")
+
+        statText.textContent = stat
+
+        modalContent.appendChild(statText)
+    })
+
+    modal.classList.remove("hidden")
+}
 
