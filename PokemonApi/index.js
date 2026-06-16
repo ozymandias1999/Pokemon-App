@@ -146,6 +146,9 @@ function pokeRender () {
 
     pokeDelete.addEventListener("click", ()=> {
 
+      //Sirve para detener la apertura de modal no deseada  
+      event.stopPropagation()
+
       pokemons =  pokemons.filter(poke=> pokemon.id !== poke.id )
       //Visualizar en consola el pokemon
       console.log(pokemons)
@@ -156,8 +159,6 @@ function pokeRender () {
     pokeCard.addEventListener("click",()=>{
         openModal(pokemon)
     })
-
-    
 
 })}
     
@@ -257,7 +258,7 @@ function openModal (pokemon) {
     const modalSkillsName = modalSkills.join(", ")
     console.log(modalSkillsName)
     //Se indica con que información rellenar esos elementos creados
-
+    const statsTitle = document.createElement("h3")
 
     modalPokeImage.src= pokemon.sprites.front_default
     modalPokeName.textContent = pokemon.name
@@ -266,7 +267,7 @@ function openModal (pokemon) {
     modalPokeHeight.textContent = `Height: ${(pokemon.height)/10} m`
     modalPokeWeigth.textContent = `Weight: ${(pokemon.weight)/10} kg`
     modalPokeSkills.textContent = `Skills: ${modalSkillsName}`    
-
+    statsTitle.textContent = "Stats"
     //Se adhieren al pokeCard
     modalContent.appendChild(modalPokeDelete)
     modalContent.appendChild(modalPokeImage)
@@ -275,11 +276,16 @@ function openModal (pokemon) {
     modalContent.appendChild(modalPokeHeight)
     modalContent.appendChild(modalPokeWeigth)
     modalContent.appendChild(modalPokeSkills)
+    modalContent.appendChild(statsTitle) 
 
     //Se añaden los estilos
     modalContent.classList.add("poke-Card")
     modalPokeDelete.classList.add("delete-btn")
     modalPokeSkills.classList.add("skills")
+    modalPokeImage.classList.add("modal-image")
+    modalPokeSkills.classList.add("skills")
+    modalPokeDelete.classList.add("modal-close")
+    
 
      //Luego de obtener el valor del Type colocar (fijarse arriba) se añade el colocar a los estilos segun el tipo
     modalContent.style.backgroundColor = modalColor
@@ -290,18 +296,38 @@ function openModal (pokemon) {
 
     console.log(pokemon.stats)
 
-    const modalStats = pokemon.stats.map(stats=> `${stats.stat.name}: ${stats.base_stat}`)
+    
 
-    console.log(modalStats)
+    
+   
 
-    modalStats.forEach(stat=> {
-        const statText = document.createElement("p")
+    const modalStats = pokemon.stats.forEach(stats=> {
+        
+        
+        const statContainer = document.createElement("div")
 
-        statText.textContent = stat
+        const statName = document.createElement("p")
 
-        modalContent.appendChild(statText)
+        const statBar = document.createElement("div")
+        const statFill = document.createElement("div")
+
+
+        statName.textContent = `${stats.stat.name}: ${(stats.base_stat)}`
+
+        statContainer.appendChild(statName)
+        statContainer.appendChild(statBar)
+        statBar.appendChild(statFill)
+
+
+        statFill.style.width = `${stats.base_stat}px`
+
+        modalContent.appendChild(statContainer)
+
+
+
+        statBar.classList.add("stat-bar")
+        statFill.classList.add("stat-fill")
     })
 
     modal.classList.remove("hidden")
 }
-
